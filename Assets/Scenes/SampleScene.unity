@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 172457645}
   m_Layer: 0
   m_Name: Food
-  m_TagString: Untagged
+  m_TagString: food
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -426,6 +426,7 @@ GameObject:
   - component: {fileID: 1109653367}
   - component: {fileID: 1109653366}
   - component: {fileID: 1109653365}
+  - component: {fileID: 1109653369}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -520,6 +521,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1109653369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109653364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c634d23e72e194089ad5a322dda7b923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  food: {fileID: 172457644}
 --- !u!1 &1174072866
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,20 +680,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d31b338c6b82a46d8a28cf09ec0cce5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 1174072871}
+  foodCollider: {fileID: 172457645}
+  nest: {fileID: 2121489051}
   antSpeed: 1
   rotationSpeed: 10
   offset: -90
-  rb: {fileID: 1174072871}
-  frameInterval: 300
   capSpeedFactor: 5
   turnFrameCounterLimit: 1000
   turnCoefficient: 0.1
-  food: {fileID: 172457644}
-  nest: {fileID: 2121489051}
-  foodAttractionRadius: 4.5
+  foodAttractionRadius: 2
   foundFoodRadius: 0.1
   deliverFoodRadius: 0.1
-  trailFrameStep: 500
+  trailFrameStep: 1000
 --- !u!1 &2121489051
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,7 +814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ant: {fileID: 1174072866}
-  noOfAnts: 0
+  noOfAnts: 50
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

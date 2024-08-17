@@ -5,37 +5,60 @@ using Random = System.Random;
 using System;
 public class AntBehaviour : MonoBehaviour
 {
-
-    [SerializeField] float antSpeed;
-    [SerializeField] float rotationSpeed = 10f; 
-    [SerializeField] float offset = -90f; 
-    [SerializeField] Rigidbody rb;
-    [SerializeField] int frameInterval = 100;
-    [SerializeField] float capSpeedFactor = 0.7f;
-    [SerializeField] int turnFrameCounterLimit = 1000;
-    [SerializeField] float turnCoefficient = 1;
-    [SerializeField] GameObject food;
-    [SerializeField] GameObject nest;
-    [SerializeField] float foodAttractionRadius;
-    [SerializeField] float foundFoodRadius = 0.1f;
-    [SerializeField] float deliverFoodRadius = 0.1f;
-    int countFrames = 0;
     Random random = new Random();
-    private bool turnLeft = true;
-    private bool currentlyTurning = false;
-    private float randTurnMultiplier = 1;
-    private int randTurnFrameCounterLimit = 1000;
-    private int turnFrameCounter = 0;
 
+    //ant's rigid body
+    [SerializeField] Rigidbody rb;
+    //food GO
+    // [SerializeField] GameObject food;
+    [SerializeField] Collider foodCollider;
+    //nest GO
+    [SerializeField] GameObject nest;
+    //speed of ant
+    [SerializeField] float antSpeed;
+    //speed ant should rotate
+    [SerializeField] float rotationSpeed = 10f; 
+    //unknown, investigate, to do with rotation
+    [SerializeField] float offset = -90f;
+    //factor by which ants speed is capped
+    [SerializeField] float capSpeedFactor = 0.7f;
+    //limits number of frames used for a ant's turn in movement
+    [SerializeField] int turnFrameCounterLimit = 1000;
+    //turn speed multplier (cross vector)
+    [SerializeField] float turnCoefficient = 1;
+    //distance in which an ant will see food and move towards it
+    [SerializeField] float foodAttractionRadius;
+    //distance in which an ant will obtain food from the position of the food itself
+    [SerializeField] float foundFoodRadius = 0.1f;
+    //as above but delivering food to nest
+    [SerializeField] float deliverFoodRadius = 0.1f;
+    //interval by which a position is inserted into the trail
     [SerializeField] int trailFrameStep = 500;
+    //measures if an ant should turn left or right in the current turn
+    private bool turnLeft = true;
+    //measures if an ant is currently in a movement turn
+    private bool currentlyTurning = false;
+    //variable to randomly alter turn factor
+    private float randTurnMultiplier = 1;
+    //variable to randomly alter turn length
+    private int randTurnFrameCounterLimit = 1000;
+    //counts frames during a turn
+    private int turnFrameCounter = 0;
+    //counts frames between trail position intervals
     private int trailFrameCounter = 0;
+    //stores current trail of ant normal movement behaviour
     private List<Vector3> currentTrail = new List<Vector3>();
-    private List<Vector3> resetTrail = new List<Vector3>();
-    
+    //copies currentTrail when ant deliver's food, used to trace back path
+    private List<Vector3> oldTrail = new List<Vector3>();
+    //used to store current ant movement state
     private int antMovementState = Constants.ANT_MOVEMENT_STATE_NORMAL;
 
     //Tracks the current index the ant is moving toward in the trail
+    //Note that this currently is intended to handle going both back 
+    //and forth between food
     private int currentTrailStepIndex = 0;
+
+    private GameObject foodFoundGo;
 
 
     // Start is called before the first frame update
@@ -44,7 +67,6 @@ public class AntBehaviour : MonoBehaviour
         rb.velocity = new Vector3(antSpeed * 0.2f,0,0);
 
         currentTrail.Add(nest.transform.position);
-        resetTrail.Add(nest.transform.position);
     }
 
     // Update is called once per frame
@@ -71,6 +93,9 @@ public class AntBehaviour : MonoBehaviour
             case Constants.ANT_MOVEMENT_STATE_FOUND_FOOD:
                 foundFood();
             break;
+            case Constants.ANT_MOVEMENT_STATE_FOLLOW_FOOD_TRAIL:
+                followFoodTrail();
+            break;
         }
         
         capVelocity();
@@ -81,30 +106,60 @@ public class AntBehaviour : MonoBehaviour
             //if in state found food, check if need to go back to normal
             case Constants.ANT_MOVEMENT_STATE_FOUND_FOOD:
                 if ((nest.transform.position - transform.position).magnitude < deliverFoodRadius) {
-                    GetComponent<Renderer>().material.color = Color.black;
+                    GetComponent<Renderer>().material.color = Color.green;
 
                     //reset the currentTrail
-                    currentTrail = resetTrail;
-                    return Constants.ANT_MOVEMENT_STATE_NORMAL;
+                    // oldTrail = currentTrail;
+                    oldTrail = new List<Vector3>();
+                    foreach (Vector3 position in currentTrail) {
+                        oldTrail.Add(position);
+                    }
+
+                    currentTrail = new List<Vector3>();
+                    currentTrail.Add(nest.transform.position);
+                    // currentTrail = resetTrail;
+
+                    currentTrailStepIndex = 1;
+
+                    // Debug.Log(oldTrail[oldTrail.Count -1]);
+                    return Constants.ANT_MOVEMENT_STATE_FOLLOW_FOOD_TRAIL;
                 }
             break;
             //else if in sees food state, check if need to switch to found food
             case Constants.ANT_MOVEMENT_STATE_SEES_FOOD:
-                if ((food.transform.position - transform.position).magnitude < foundFoodRadius) {
+            if ((foodFoundGo.transform.position - transform.position).magnitude < foundFoodRadius) {
+                    GetComponent<Renderer>().material.color = Color.magenta;
+                    currentTrail.Add(foodFoundGo.transform.position);
+                    //Since we add food position, go to step before food position
+                    currentTrailStepIndex = currentTrail.Count - 2;
+                    // Debug.Log(currentTrail.Count);
+                    return Constants.ANT_MOVEMENT_STATE_FOUND_FOOD;
+                }
+                break;
+            case Constants.ANT_MOVEMENT_STATE_FOLLOW_FOOD_TRAIL:
+                if ((foodFoundGo.transform.position - transform.position).magnitude < foundFoodRadius) {
                     GetComponent<Renderer>().material.color = Color.blue;
-                    currentTrailStepIndex = currentTrail.Count - 1;
+                    currentTrail.Add(foodFoundGo.transform.position);
+                    //Since we add food position, go to step before food position
+                    currentTrailStepIndex = currentTrail.Count - 2;
+                    // Debug.Log(currentTrail.Count);
                     return Constants.ANT_MOVEMENT_STATE_FOUND_FOOD;
                 }
             break;
             //else if in normal (random movement) state, check if ant can see food
             case Constants.ANT_MOVEMENT_STATE_NORMAL:
-                if ((food.transform.position - transform.position).magnitude < foodAttractionRadius) {
-                    GetComponent<Renderer>().material.color = Color.red;
-                    return Constants.ANT_MOVEMENT_STATE_SEES_FOOD;
+                Collider[] hitColliders = Physics.OverlapSphere(transform.position, foodAttractionRadius);
+                foreach (var hitCollider in hitColliders)
+                {
+                    if (hitCollider.gameObject.CompareTag("food")) {
+                        GetComponent<Renderer>().material.color = Color.red;
+                        foodFoundGo = hitCollider.gameObject;
+                        return Constants.ANT_MOVEMENT_STATE_SEES_FOOD;
+                    }
                 }
             break;
             default:
-                return Constants.ANT_MOVEMENT_STATE_NORMAL;
+                return antMovementState;
         }
         
         //if no change needed, return current state
@@ -166,7 +221,7 @@ public class AntBehaviour : MonoBehaviour
 
     //Move ant towards food
     private void goToFood() {
-        Vector3 attractedToFoodVector = food.transform.position - transform.position;
+        Vector3 attractedToFoodVector = foodFoundGo.transform.position - transform.position;
         attractedToFoodVector.Normalize();
         rb.velocity = attractedToFoodVector;
     }
@@ -180,14 +235,12 @@ public class AntBehaviour : MonoBehaviour
         }
     }
 
-    //Follow trail
+    //Follow trail back to nest
     public void foundFood() {
+        // Debug.Log(currentTrailStepIndex);
 
-        //Special case
+        //Unknown bug why it ever hits this
         if (currentTrailStepIndex == -1 ) {
-            Vector3 goHome = nest.transform.position - transform.position;
-            goHome.Normalize();
-            rb.velocity = goHome * antSpeed;
             return;
         }
 
@@ -197,8 +250,34 @@ public class AntBehaviour : MonoBehaviour
         //If at the next step, remove from array and continue along trail
         //Note checking for distance being half ant speed prevents bug where ant moves back and forth
         //over intended point
-        if (goToNextStepVector.magnitude <= antSpeed / 2) {
+        if (goToNextStepVector.magnitude <= deliverFoodRadius) {
             currentTrailStepIndex--;
+            return;
+        } else {
+            goToNextStepVector.Normalize();
+            rb.velocity = goToNextStepVector * antSpeed;
+        }
+    }
+
+    //Follow trail back to food
+    public void followFoodTrail() {
+
+        //Unknown bug why it ever hits this
+        if (currentTrailStepIndex == oldTrail.Count) {
+            return;
+        }
+
+        // Debug.Log(currentTrailStepIndex);
+        //             Debug.Log(oldTrail.Count);
+
+        Vector3 nextStep = oldTrail[currentTrailStepIndex];
+        Vector3 goToNextStepVector = nextStep - transform.position;
+
+        //If at the next step, remove from array and continue along trail
+        //Note checking for distance being half ant speed prevents bug where ant moves back and forth
+        //over intended point
+        if (goToNextStepVector.magnitude <= foundFoodRadius) {
+            currentTrailStepIndex++;
             return;
         } else {
             goToNextStepVector.Normalize();
