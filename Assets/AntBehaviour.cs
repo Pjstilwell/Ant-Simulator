@@ -99,6 +99,7 @@ public class AntBehaviour : MonoBehaviour
         }
         
         capVelocity();
+        RotateTowardsTarget();
     }
 
     private int determineMovementState() {
@@ -106,7 +107,7 @@ public class AntBehaviour : MonoBehaviour
             //if in state found food, check if need to go back to normal
             case Constants.ANT_MOVEMENT_STATE_FOUND_FOOD:
                 if ((nest.transform.position - transform.position).magnitude < deliverFoodRadius) {
-                    GetComponent<Renderer>().material.color = Color.green;
+                    // GetComponent<Renderer>().material.color = Color.green;
 
                     //reset the currentTrail
                     // oldTrail = currentTrail;
@@ -128,7 +129,7 @@ public class AntBehaviour : MonoBehaviour
             //else if in sees food state, check if need to switch to found food
             case Constants.ANT_MOVEMENT_STATE_SEES_FOOD:
             if ((foodFoundGo.transform.position - transform.position).magnitude < foundFoodRadius) {
-                    GetComponent<Renderer>().material.color = Color.magenta;
+                    // GetComponent<Renderer>().material.color = Color.magenta;
                     currentTrail.Add(foodFoundGo.transform.position);
                     //Since we add food position, go to step before food position
                     currentTrailStepIndex = currentTrail.Count - 2;
@@ -138,7 +139,7 @@ public class AntBehaviour : MonoBehaviour
                 break;
             case Constants.ANT_MOVEMENT_STATE_FOLLOW_FOOD_TRAIL:
                 if ((foodFoundGo.transform.position - transform.position).magnitude < foundFoodRadius) {
-                    GetComponent<Renderer>().material.color = Color.blue;
+                    // GetComponent<Renderer>().material.color = Color.blue;
                     currentTrail.Add(foodFoundGo.transform.position);
                     //Since we add food position, go to step before food position
                     currentTrailStepIndex = currentTrail.Count - 2;
@@ -152,7 +153,7 @@ public class AntBehaviour : MonoBehaviour
                 foreach (var hitCollider in hitColliders)
                 {
                     if (hitCollider.gameObject.CompareTag("food")) {
-                        GetComponent<Renderer>().material.color = Color.red;
+                        // GetComponent<Renderer>().material.color = Color.red;
                         foodFoundGo = hitCollider.gameObject;
                         return Constants.ANT_MOVEMENT_STATE_SEES_FOOD;
                     }
@@ -167,9 +168,17 @@ public class AntBehaviour : MonoBehaviour
     }
 
     public void RotateTowardsTarget() {
-        float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
-        Quaternion rotation = Quaternion.AngleAxis(angle + offset, Vector3.up);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+        // Determine which direction to rotate towards
+        Vector3 targetDirection = rb.velocity;
+
+        // The step size is equal to speed times frame time.
+        float singleStep = antSpeed * Time.deltaTime;
+
+        // Rotate the forward vector towards the target direction by one step
+        Vector3 newDirection = Vector3.RotateTowards(rb.velocity, targetDirection, singleStep, 0.0f);
+
+        // Calculate a rotation a step closer to the target and applies rotation to this object
+        transform.rotation = Quaternion.LookRotation(newDirection);
     }
 
     public void capVelocity() {

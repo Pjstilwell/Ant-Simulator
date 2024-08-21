@@ -611,6 +611,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 3a0237ce26fe74c7ea874cd66d6804c9, type: 2}
+  - {fileID: 2100000, guid: 3a0237ce26fe74c7ea874cd66d6804c9, type: 2}
+  - {fileID: 2100000, guid: 3a0237ce26fe74c7ea874cd66d6804c9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -639,7 +641,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1174072866}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 2476088599607868726, guid: 5fb17dad034394137af73f574501032e, type: 3}
 --- !u!4 &1174072870
 Transform:
   m_ObjectHideFlags: 0
@@ -648,13 +650,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1174072866}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!54 &1174072871
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -703,7 +705,7 @@ MonoBehaviour:
   capSpeedFactor: 5
   turnFrameCounterLimit: 1000
   turnCoefficient: 0.1
-  foodAttractionRadius: 2
+  foodAttractionRadius: 1
   foundFoodRadius: 0.1
   deliverFoodRadius: 0.1
   trailFrameStep: 1000
@@ -828,7 +830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ant: {fileID: 1174072866}
-  noOfAnts: 50
+  noOfAnts: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
