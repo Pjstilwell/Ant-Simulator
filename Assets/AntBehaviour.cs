@@ -168,17 +168,27 @@ public class AntBehaviour : MonoBehaviour
     }
 
     public void RotateTowardsTarget() {
-        // Determine which direction to rotate towards
-        Vector3 targetDirection = rb.velocity;
+        // float angle = Mathf.Atan(rb.velocity.y, rb.velocity.x, rb.velocity.z) * Mathf.RadDeg;
+        // Quaternion rotation = Quaternion.AngleAxis(angle + offset, Vector3.forward);
+        // transform.rotation = Quaternion.Slerp(transform.rotation, rotation, antSpeed * Time.deltaTime);
 
-        // The step size is equal to speed times frame time.
-        float singleStep = antSpeed * Time.deltaTime;
+        // // Determine which direction to rotate towards
+        // Vector3 targetDirection = rb.velocity;
 
-        // Rotate the forward vector towards the target direction by one step
-        Vector3 newDirection = Vector3.RotateTowards(rb.velocity, targetDirection, singleStep, 0.0f);
+        // // The step size is equal to speed times frame time.
+        // float singleStep = antSpeed * Time.deltaTime;
 
-        // Calculate a rotation a step closer to the target and applies rotation to this object
-        transform.rotation = Quaternion.LookRotation(newDirection);
+        // // Rotate the forward vector towards the target direction by one step
+        // Vector3 newDirection = Vector3.RotateTowards(rb.velocity, targetDirection, singleStep, 0.0f);
+
+        // Debug.DrawRay(transform.position, newDirection, Color.red);
+
+        // // Calculate a rotation a step closer to the target and applies rotation to this object
+
+        var rotation = Quaternion.LookRotation(rb.velocity);
+        rotation *= Quaternion.Euler(-90, 0, 180); // this adds a 90 degrees Y rotation
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1);
+        // transform.rotation = Quaternion.LookRotation(rb.velocity, Vector3.forward);
     }
 
     public void capVelocity() {
