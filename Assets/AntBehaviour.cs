@@ -34,6 +34,7 @@ public class AntBehaviour : MonoBehaviour
     [SerializeField] float deliverFoodRadius = 0.1f;
     //interval by which a position is inserted into the trail
     [SerializeField] int trailFrameStep = 500;
+
     //measures if an ant should turn left or right in the current turn
     private bool turnLeft = true;
     //measures if an ant is currently in a movement turn
@@ -64,9 +65,8 @@ public class AntBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // transform.position = new Vector3(nest.transform.position.x, 0.1f, nest.transform.position.z);
         rb.velocity = new Vector3(antSpeed * 0.2f,0,0);
-
-        currentTrail.Add(nest.transform.position);
     }
 
     // Update is called once per frame
@@ -168,27 +168,10 @@ public class AntBehaviour : MonoBehaviour
     }
 
     public void RotateTowardsTarget() {
-        // float angle = Mathf.Atan(rb.velocity.y, rb.velocity.x, rb.velocity.z) * Mathf.RadDeg;
-        // Quaternion rotation = Quaternion.AngleAxis(angle + offset, Vector3.forward);
-        // transform.rotation = Quaternion.Slerp(transform.rotation, rotation, antSpeed * Time.deltaTime);
-
-        // // Determine which direction to rotate towards
-        // Vector3 targetDirection = rb.velocity;
-
-        // // The step size is equal to speed times frame time.
-        // float singleStep = antSpeed * Time.deltaTime;
-
-        // // Rotate the forward vector towards the target direction by one step
-        // Vector3 newDirection = Vector3.RotateTowards(rb.velocity, targetDirection, singleStep, 0.0f);
-
-        // Debug.DrawRay(transform.position, newDirection, Color.red);
-
-        // // Calculate a rotation a step closer to the target and applies rotation to this object
 
         var rotation = Quaternion.LookRotation(rb.velocity);
-        rotation *= Quaternion.Euler(-90, 0, 180); // this adds a 90 degrees Y rotation
+        rotation *= Quaternion.Euler(-90, 0, -90); // this adds a rotation
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1);
-        // transform.rotation = Quaternion.LookRotation(rb.velocity, Vector3.forward);
     }
 
     public void capVelocity() {

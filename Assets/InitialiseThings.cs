@@ -10,7 +10,7 @@ public class InitialiseThings : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject newFood = Instantiate(food, new Vector3(-5, 0.5f, 0), Quaternion.identity);
+        GameObject newFood = Instantiate(food, new Vector3(-5, 0.1f, 0), Quaternion.identity);
         // newFood.tag = "food";
 
     }
