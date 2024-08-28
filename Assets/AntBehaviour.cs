@@ -269,9 +269,6 @@ public class AntBehaviour : MonoBehaviour
             return;
         }
 
-        // Debug.Log(currentTrailStepIndex);
-        //             Debug.Log(oldTrail.Count);
-
         Vector3 nextStep = oldTrail[currentTrailStepIndex];
         Vector3 goToNextStepVector = nextStep - transform.position;
 
