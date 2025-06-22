@@ -296,16 +296,16 @@ MonoBehaviour:
   rb: {fileID: 382552160}
   foodCollider: {fileID: 172457645}
   nest: {fileID: 2121489051}
-  antSpeed: 1
-  rotationSpeed: 10
-  offset: -90
+  antSpeed: 0.5
   capSpeedFactor: 5
   turnFrameCounterLimit: 1000
   turnCoefficient: 0.1
   foodAttractionRadius: 1
-  foundFoodRadius: 0.1
+  foundFoodRadius: 0.3
   deliverFoodRadius: 0.1
   trailFrameStep: 1000
+  trailMarkerStep: 1000
+  trailMarker: {fileID: 1782649643}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,9 +777,7 @@ MonoBehaviour:
   rb: {fileID: 1174072871}
   foodCollider: {fileID: 172457645}
   nest: {fileID: 2121489051}
-  antSpeed: 1
-  rotationSpeed: 10
-  offset: -90
+  antSpeed: 0.5
   capSpeedFactor: 5
   turnFrameCounterLimit: 1000
   turnCoefficient: 0.1
@@ -787,6 +785,127 @@ MonoBehaviour:
   foundFoodRadius: 0.1
   deliverFoodRadius: 0.1
   trailFrameStep: 1000
+  trailMarkerStep: 500
+  trailMarker: {fileID: 0}
+--- !u!1 &1782649643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1782649647}
+  - component: {fileID: 1782649646}
+  - component: {fileID: 1782649645}
+  - component: {fileID: 1782649644}
+  - component: {fileID: 1782649648}
+  m_Layer: 0
+  m_Name: TrailMarker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!135 &1782649644
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782649643}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1782649645
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782649643}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 1b6d15b355fb04d48a8d084369892845, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1782649646
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782649643}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1782649647
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782649643}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1782649648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782649643}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948c1288f69d64db3af4c9eec1f57136, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trailMarkerLife: 15000
 --- !u!1001 &1936815240
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1026,3 +1145,4 @@ SceneRoots:
   - {fileID: 2121489055}
   - {fileID: 172457648}
   - {fileID: 1936815240}
+  - {fileID: 1782649647}
