@@ -296,16 +296,26 @@ MonoBehaviour:
   rb: {fileID: 382552160}
   foodCollider: {fileID: 172457645}
   nest: {fileID: 2121489051}
-  antSpeed: 0.5
+  antSpeed: 0.3
   capSpeedFactor: 5
   turnFrameCounterLimit: 1000
   turnCoefficient: 0.1
   foodAttractionRadius: 1
   foundFoodRadius: 0.3
   deliverFoodRadius: 0.1
+  advertiseRadius: 0.2
   trailFrameStep: 1000
   trailMarkerStep: 1000
   trailMarker: {fileID: 1782649643}
+  stopped: 0
+  stopFramesCount: 200
+  inputStopFramesPeriodicallyCount: 300
+  inputFramesTilStopPeriodicallyCount: 600
+  currentTrail: []
+  oldTrail: []
+  antMovementState: 0
+  currentTrailStepIndex: 0
+  foodFoundGo: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,9 +794,19 @@ MonoBehaviour:
   foodAttractionRadius: 1
   foundFoodRadius: 0.1
   deliverFoodRadius: 0.1
+  advertiseRadius: 0.2
   trailFrameStep: 1000
   trailMarkerStep: 500
   trailMarker: {fileID: 0}
+  stopped: 0
+  stopFramesCount: 0
+  inputStopFramesPeriodicallyCount: 0
+  inputFramesTilStopPeriodicallyCount: 0
+  currentTrail: []
+  oldTrail: []
+  antMovementState: 0
+  currentTrailStepIndex: 0
+  foodFoundGo: {fileID: 0}
 --- !u!1 &1782649643
 GameObject:
   m_ObjectHideFlags: 0
@@ -905,7 +925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 948c1288f69d64db3af4c9eec1f57136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trailMarkerLife: 15000
+  trailMarkerLife: 10000
 --- !u!1001 &1936815240
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -989,6 +1009,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7d11502cf0c554d7cbe96bf3eda733c9, type: 3}
       propertyPath: m_Name
       value: ant2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7d11502cf0c554d7cbe96bf3eda733c9, type: 3}
+      propertyPath: m_TagString
+      value: ant
       objectReference: {fileID: 0}
     - target: {fileID: 3251082376355124355, guid: 7d11502cf0c554d7cbe96bf3eda733c9, type: 3}
       propertyPath: m_Materials.Array.data[0]
