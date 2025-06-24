@@ -13,7 +13,7 @@ public class AntBehaviour : MonoBehaviour
     // [SerializeField] GameObject food;
     [SerializeField] Collider foodCollider;
     //nest GO
-    [SerializeField] GameObject nest;
+    [SerializeField] public GameObject nest;
     //speed of ant
     [SerializeField] float antSpeed;
     //factor by which ants speed is capped

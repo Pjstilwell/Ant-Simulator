@@ -11,8 +11,13 @@ public class SpawnAnts : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < noOfAnts; i++) {
-            Instantiate(ant);
+        for (int i = 0; i < noOfAnts; i++)
+        {
+            GameObject newAnt = Instantiate(ant);
+            newAnt.SetActive(true);
+            newAnt.transform.position = transform.position;
+            AntBehaviour newAntScript = newAnt.GetComponent<AntBehaviour>();
+            newAntScript.nest = gameObject;
         }
     }
 
