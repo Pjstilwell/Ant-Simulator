@@ -76,3 +76,10 @@ crashlytics-build.properties
 extensions.json
 launch.json
 settings.json
+
+#UI Third Party Assets
+Assets/TextMesh Pro/*
+UIElementsSchema/*
+TextMesh Pro.meta
+UI Toolkit.meta
+Assets/UI Toolkit/*
